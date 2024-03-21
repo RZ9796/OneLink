@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 const cookieparser = require("cookie-parser");
 require("dotenv").config({ path: "./.env" });
 const cors = require("cors");
@@ -14,11 +15,18 @@ app.use(express.static("profilePicture"));
 app.use(cookieparser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin: "https://onelink-4jy9.onrender.com",
     // origin: "*",
     credentials: true,
   })
 );
+// pr
+app.use(express.static(path.join(__dirname, "dist")));
+
+app.use("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 //
 app.use("/api/v1/profile", userProtected, require("./routes/ProfileRoutes"));
 app.use("/api/v1/auth", require("./routes/authRoute"));
