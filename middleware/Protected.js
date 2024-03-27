@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 // const User = require("../model/User");
 exports.userProtected = asynchandler((req, res, next) => {
   const token = req.cookies.auth;
-  console.log(token);
+  console.log("token", token);
   if (!token) {
     return res.status(401).json({ message: "No cookie found" });
   }
