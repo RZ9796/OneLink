@@ -15,14 +15,14 @@ app.use(express.static("profilePicture"));
 app.use(cookieparser());
 app.use(
   cors({
-    // origin: "http://localhost:5173",
-    origin: "https://onelink-4jy9.onrender.com",
+    origin: "http://localhost:5173",
+    // origin: "https://onelink-4jy9.onrender.com",
     // origin: "*",
     credentials: true,
   })
 );
 // production code
-app.use(express.static(path.join(__dirname, "dist")));
+// app.use(express.static(path.join(__dirname, "dist")));
 //
 app.use("/api/v1/profile", userProtected, require("./routes/ProfileRoutes"));
 app.use("/api/v1/auth", require("./routes/authRoute"));
@@ -32,9 +32,9 @@ app.use("/api/v1/social", require("./routes/SocialRoute"));
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message || "something went wrong " });
 });
-app.use("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
+// app.use("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "dist", "index.html"));
+// });
 //
 mongoose.connection.once("open", () => {
   console.log("mongo connected");
