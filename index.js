@@ -15,8 +15,8 @@ app.use(express.static("profilePicture"));
 app.use(cookieparser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    // origin: "https://onelink-4jy9.onrender.com",
+    // origin: "http://localhost:5173",
+    origin: "https://onelink-4jy9.onrender.com",
     // origin: "*",
     credentials: true,
   })
