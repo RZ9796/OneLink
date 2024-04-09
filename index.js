@@ -24,7 +24,7 @@ app.use(
 // production code
 app.use(express.static(path.join(__dirname, "dist")));
 
-app.use("/api/v1/profile", userProtected, require("./routes/ProfileRoutes"));
+app.use("/api/v1/profile", require("./routes/ProfileRoutes"));
 app.use("/api/v1/auth", require("./routes/authRoute"));
 app.use("/api/v1/admin", userProtected, require("./routes/AdminRoutes"));
 app.use("/api/v1/social", require("./routes/SocialRoute"));
@@ -32,6 +32,7 @@ app.use("/api/v1/social", require("./routes/SocialRoute"));
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message || "something went wrong " });
 });
+// production code
 app.use("*", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
