@@ -9,12 +9,15 @@ const Social = require("../models/Social");
 //Profile
 exports.getProfileByusername = asynchandler(async (req, res) => {
   const { username } = req.params;
-  console.log(username);
+  console.log("username", username);
 
-  const x = await User.find({ username });
+  const x = await User.findOne({ username });
   const y = await Admin.find({ username });
-  const z = await Social.find(x._id);
-
+  const z = await Social.find({ userId: x._id });
+  const userP = new Array(x);
+  console.log("userP", userP);
+  console.log("xxxxxxx", x);
+  console.log("yyyyyyy", y);
   console.log("zzzzzzzz", z);
 
   if (!y) {
@@ -23,24 +26,24 @@ exports.getProfileByusername = asynchandler(async (req, res) => {
 
   res
     .status(200)
-    .json({ message: "Profile added successfully", result: { y, x, z } });
+    .json({ message: "Profile added successfully", result: { y, userP, z } });
 });
 
 exports.getProfile = asynchandler(async (req, res) => {
-  console.log("get profile", req.body);
+  // console.log("get profile", req.body);
   const result = await User.find({ _id: req.body.userId });
-  console.log("x", result);
+  // console.log("x", result);
   if (!result) {
     return res.status(400).json({ message: "usernot found " });
   }
 
-  res.status(200).json({ message: "profile Added success", result });
+  res.status(200).json({ message: "profile fetched success", result });
 });
 exports.addProfile = asynchandler(async (req, res) => {
-  console.log("addddd", req.body);
+  // console.log("addddd", req.body);
   // const x = await User.findOne({ username: req.body.username });//before
   const x = await User.findById(req.body.userId); //after
-  console.log("adddprofile", x);
+  // console.log("adddprofile", x);
   if (!x) {
     return res.status(400).json({ message: "username error" });
   }
@@ -53,7 +56,7 @@ exports.addProfile = asynchandler(async (req, res) => {
 });
 exports.updateProfilePicture = asynchandler(async (req, res) => {
   const { linkId } = req.params;
-  console.log("linkID edit", linkId);
+  // console.log("linkID edit", linkId);
 
   uploadProfile(req, res, async (err) => {
     if (err) {
@@ -61,9 +64,9 @@ exports.updateProfilePicture = asynchandler(async (req, res) => {
         .status(400)
         .json({ message: err.message || "unable to Update image" });
     }
-
+    let updatedImg;
     const result = await User.findById(linkId);
-    console.log("edit", result);
+    // console.log("edit", result);
     if (req.file) {
       if (fsss.existsSync(`/profilePicture/${result.photo}`)) {
         await fs.unlink(
@@ -72,11 +75,24 @@ exports.updateProfilePicture = asynchandler(async (req, res) => {
       }
       // if (result.photo) {
       // }
-      await User.findByIdAndUpdate(linkId, {
-        photo: req.file.filename,
-      });
+      updatedImg = await User.findByIdAndUpdate(
+        linkId,
+        {
+          photo: req.file.filename,
+        },
+        { new: true }
+      );
     }
-    res.status(200).json({ message: "user update success" });
+    res.status(200).json({
+      message: "user update success",
+      updatedImg: {
+        _id: updatedImg._id,
+        name: updatedImg.name,
+        email: updatedImg.email,
+        photo: updatedImg.photo,
+        username: updatedImg.username,
+      },
+    });
   });
   // await Admin.findByIdAndUpdate(linkId, req.body);
 });

@@ -14,9 +14,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       // required: true,
     },
-    photo: {
+    password: {
       type: String,
       // required: true,
+    },
+    photo: {
+      type: String,
+      default: "dummy.png",
     },
     background: {
       type: String,
