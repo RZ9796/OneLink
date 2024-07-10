@@ -92,6 +92,14 @@ exports.updateLogo = asynchandler(async (req, res) => {
 });
 
 exports.addUsername = asynchandler(async (req, res) => {
+  const existingUser = await User.findOne({ username: req.body.username });
+
+  if (existingUser) {
+    return res
+      .status(500)
+      .json({ message: "Username already taken By SomeOne Before You " });
+  }
+
   const result = await User.findByIdAndUpdate(
     req.body.userId,
     {
@@ -100,7 +108,17 @@ exports.addUsername = asynchandler(async (req, res) => {
     { new: true }
   );
   if (!result) {
-    return res.status(400).json({ message: "Fail" });
+    return res.status(400).json({ message: "Not Able to find User" });
   }
-  res.json({ message: "employers Detail Fetch Success", result });
+  res.json({
+    message: "employers Detail Fetch Success",
+    result: {
+      _id: result._id,
+      email: result.email,
+      name: result.name,
+      username: result.username,
+      background: result.background,
+      photo: result.photo,
+    },
+  });
 });

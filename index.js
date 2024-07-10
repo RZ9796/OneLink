@@ -15,8 +15,8 @@ app.use(express.static("profilePicture"));
 app.use(cookieparser());
 app.use(
   cors({
-    // origin: "http://localhost:5173",
-    origin: "https://onelink-4jy9.onrender.com",
+    origin: "http://localhost:5173",
+    // origin: "https://onelink-4jy9.onrender.com",
     // origin: "*",
     credentials: true,
   })
@@ -33,9 +33,9 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message || "something went wrong " });
 });
 // production code
-app.use("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
+// app.use("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "dist", "index.html"));
+// });
 
 mongoose.connection.once("open", () => {
   console.log("mongo connected");

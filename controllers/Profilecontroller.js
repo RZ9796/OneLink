@@ -27,6 +27,7 @@ exports.getProfileByusername = asynchandler(async (req, res) => {
   res
     .status(200)
     .json({ message: "Profile added successfully", result: { y, userP, z } });
+  res.status(500).json({ message: "Invalid Url" });
 });
 
 exports.getProfile = asynchandler(async (req, res) => {
